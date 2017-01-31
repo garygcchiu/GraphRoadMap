@@ -6,7 +6,7 @@ The main method is in class Solve.java , so to run the program you will type:
 
 > java Solve input_file
 
-> Ex.: Java Solve map3
+> Ex.:/bin> Java Solve map3
 
 You can also type:
 
