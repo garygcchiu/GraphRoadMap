@@ -1,0 +1,134 @@
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
+public class Graph {
+
+	private Node[] nodeList;
+	private Edge[][] adjMatrix;
+	private int length;
+	private LinkedList<Edge> adjList;
+	
+	
+	public Graph(int n) {
+		// create adjacency matrix of size n
+		adjMatrix = new Edge[n][n];
+		nodeList = new Node[n];
+		length = n;
+		
+		// initialize n nodes into the nodeList
+		for (int i=0; i<n; i++){
+			nodeList[i] = new Node(i); 
+		}
+		
+		/*// initialize the adjacency matrix with null objects
+		for (int i=0; i<n; i++){
+			for (int j=0; j<n; j++){
+				adjMatrix[i][j] = null;
+			}
+		}
+		*/
+	}
+	
+	public Node getNode(int name) throws GraphException {
+		int index = indexVertex(name);
+		if (index == length){
+			throw new GraphException();
+		} else {
+			return nodeList[index];
+		}
+	}
+
+	public void insertEdge(Node u, Node v, int edgeType) throws GraphException {
+		int row = u.getName();
+		int col = v.getName();
+		
+		// check if nodes exist
+		if (indexVertex(u.getName()) == length || indexVertex(v.getName()) == length){
+			throw new GraphException();
+		} else { // insert into matrix
+			adjMatrix[row][col] = new Edge(u, v, edgeType);
+			adjMatrix[col][row] = new Edge(u, v, edgeType);
+		}
+	}
+
+	public Edge getEdge(Node u, Node v) throws GraphException {
+		// check if nodes exist
+		if (indexVertex(u.getName()) == length || indexVertex(v.getName()) == length){
+			throw new GraphException();
+		} else {
+			// check if edge exists
+			if (adjMatrix[u.getName()][v.getName()] == null){
+				throw new GraphException();
+			} else {
+				return adjMatrix[u.getName()][v.getName()];
+			}
+		}
+	}
+
+	public Iterator<Edge> incidentEdges(Node u) throws GraphException {
+		
+
+		ArrayList<Edge> arrList = new ArrayList<Edge>();
+		int counter = 0;
+		int row = u.getName();
+		
+		try {
+			
+			// copy row of adjacency matrix to array list 
+			for (int i=0; i<length; i++){
+				if (adjMatrix[row][i] != null){
+					arrList.add(adjMatrix[row][i]);
+					counter++;
+				}
+			}
+		} catch (ArrayIndexOutOfBoundsException e){
+			throw new GraphException();
+		}
+		
+		if (counter == 0){
+			return null;
+		} else {
+			return arrList.iterator();
+		}
+
+	}
+
+	public boolean areAdjacent(Node u, Node v) throws GraphException {
+		try {
+			if (adjMatrix[u.getName()][v.getName()] == null){
+				return false;
+			} else {
+				return true;
+			}
+		} catch (ArrayIndexOutOfBoundsException e){
+			throw new GraphException();
+		}
+	}
+	
+	private int indexVertex(int name){
+		int i=0;
+		while (i < nodeList.length && nodeList[i].getName() != name){
+			i++;
+		}
+		return i;
+	}
+	
+	/*
+	public void outputMatrix(){
+		for (int i=0; i<length; i++){
+			for (int j=0; j<length; j++){
+				if (adjMatrix[i][j] == null){
+					System.out.printf("%7d ", 0);
+				} else {
+					System.out.printf("(" + adjMatrix[i][j].firstEndpoint().getName() + ", " +
+							adjMatrix[i][j].secondEndpoint().getName() + ") ");
+					
+				}
+			}
+			System.out.print("\n");
+		}
+	}
+	*/
+
+}

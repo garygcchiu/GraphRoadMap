@@ -1,0 +1,30 @@
+// determine the type of the road
+						switch (edgeType) {
+							case (1): // break if cannot afford
+
+								if (balance < TOLL) {
+									System.out.println("cannot afford");
+									break;
+								} else {
+									balance -= TOLL;
+									System.out.println("Paid toll " + TOLL + ", new balance = " + balance);
+									// recursively go to next node
+									if (getPath(v, e, balance) == true) {
+										return true;
+									}
+									break;
+								}
+
+							case (-1): // no break: flow into case 0 to go to
+									// next node
+
+								balance -= GAIN;
+								System.out.println("Got paid " + GAIN + ", new balance = " + balance);
+
+							case (0):
+								// recursively go to next node
+								if (getPath(v, e, balance) == true) {
+									return true;
+								}
+								break;
+						}
